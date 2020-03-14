@@ -5,9 +5,9 @@ import backtrader as bt
 import datetime as dt
 
 from ccxtbt import CCXTStore
-from config import BINANCE, ENV, PRODUCTION, COIN_TARGET, COIN_REFER, DEBUG
+from config import secrets, ENV, PRODUCTION, COIN_TARGET, COIN_REFER, DEBUG
 
-from dataset.dataset import CustomDataset
+from dataset.dataset import BinanceDataset
 from sizer.percent import FullMoney
 from strategies.basic_rsi import BasicRSI
 from utils import print_trade_analysis, print_sqn, send_telegram_message
@@ -18,8 +18,8 @@ def main():
 
     if ENV == PRODUCTION:  # Live trading with Binance
         broker_config = {
-            'apiKey': BINANCE.get("key"),
-            'secret': BINANCE.get("secret"),
+            'apiKey': secrets['BINANCE']['APIKey'],
+            'secret': secrets['BINANCE']['SecretKey'],
             'nonce': lambda: str(int(time.time() * 1000)),
             'enableRateLimit': True,
         }
@@ -62,12 +62,10 @@ def main():
         cerebro.adddata(data)
 
     else:  # Backtesting with CSV file
-        data = CustomDataset(
+        data = BinanceDataset(
             name=COIN_TARGET,
-            dataname="dataset/binance_nov_18_mar_19_btc.csv",
+            dataname="dataset/binance_1m_klines.csv",
             timeframe=bt.TimeFrame.Minutes,
-            fromdate=dt.datetime(2018, 9, 20),
-            todate=dt.datetime(2019, 3, 13),
             nullvalue=0.0
         )
 

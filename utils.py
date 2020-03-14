@@ -1,6 +1,6 @@
 import requests
 
-from config import TELEGRAM, ENV
+from config import secrets, ENV
 
 
 def print_trade_analysis(analyzer):
@@ -46,8 +46,8 @@ def send_telegram_message(message=""):
     if ENV != "production":
         return
 
-    base_url = "https://api.telegram.org/bot%s" % TELEGRAM.get("bot")
+    base_url = "https://api.telegram.org/bot%s" % secrets['Telegram']['Bot']
     return requests.get("%s/sendMessage" % base_url, params={
-        'chat_id': TELEGRAM.get("channel"),
+        'chat_id': secrets['Telegram']['Channel'],
         'text': message
     })
