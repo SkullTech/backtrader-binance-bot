@@ -3,12 +3,8 @@
 import backtrader as bt
 
 
-class MACDHistSMA(bt.Indicator):
-    lines = ('histo',)
-    params = (
-        ('period', 14),
-    )
+class Greater(bt.Indicator):
+    lines = ('greater',)
 
-    def __init__(self):
-        MACD = bt.ind.MACDHisto()
-        self.l.histo = bt.indicators.MovingAverageSimple(MACD.histo, period=self.p.period)
+    def __init__(self, line1, line2):
+        self.l.greater = bt.Cmp(line1, line2)

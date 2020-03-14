@@ -10,18 +10,14 @@ from utils import send_telegram_message
 class StrategyBase(bt.Strategy):
     def __init__(self):
         self.order = None
-        self.last_operation = "SELL"
+        self.last_operation = None
         self.status = "DISCONNECTED"
-        self.bar_executed = 0
         self.buy_price_close = None
-        self.soft_sell = False
-        self.hard_sell = False
         self.log("Base strategy initialized")
 
     def reset_sell_indicators(self):
-        self.soft_sell = False
-        self.hard_sell = False
-        self.buy_price_close = None
+        self.last_buy_price = None
+        self.last_sell_price = None
 
     def notify_data(self, data, status, *args, **kwargs):
         self.status = data._getstatusname(status)
@@ -32,6 +28,8 @@ class StrategyBase(bt.Strategy):
     def short(self):
         if self.last_operation == "SELL":
             return
+
+        self.last_sell_price = self.data0.close[0]
 
         if ENV == DEVELOPMENT:
             self.log("Sell ordered: $%.2f" % self.data0.close[0])
@@ -47,16 +45,16 @@ class StrategyBase(bt.Strategy):
         if self.last_operation == "BUY":
             return
 
-        self.log("Buy ordered: $%.2f" % self.data0.close[0], True)
-        self.buy_price_close = self.data0.close[0]
+        self.last_buy_price = self.data0.close[0]
         price = self.data0.close[0]
 
         if ENV == DEVELOPMENT:
+            self.log("Buy ordered: $%.2f" % self.data0.close[0], True)
             return self.buy()
 
         cash, value = self.broker.get_wallet_balance(COIN_REFER)
         amount = (value / price) * 0.99  # Workaround to avoid precision issues
-        self.log("Buy ordered: $%.2f. Amount %.6f %s. Ballance $%.2f USDT" % (self.data0.close[0],
+        self.log("Buy ordered: $%.2f. Amount %.6f %s. Balance $%.2f USDT" % (self.data0.close[0],
                                                                               amount, COIN_TARGET, value), True)
         return self.buy(size=amount)
 

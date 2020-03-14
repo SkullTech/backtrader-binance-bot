@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import time
+import dateparser
+import argparse
 import backtrader as bt
 import datetime as dt
 
@@ -9,11 +11,11 @@ from config import secrets, ENV, PRODUCTION, COIN_TARGET, COIN_REFER, DEBUG
 
 from dataset.dataset import BinanceDataset
 from sizer.percent import FullMoney
-from strategies.basic_rsi import BasicRSI
+from strategies.basic import Basic
 from utils import print_trade_analysis, print_sqn, send_telegram_message
 
 
-def main():
+def main(args):
     cerebro = bt.Cerebro(quicknotify=True)
 
     if ENV == PRODUCTION:  # Live trading with Binance
@@ -64,8 +66,10 @@ def main():
     else:  # Backtesting with CSV file
         data = BinanceDataset(
             name=COIN_TARGET,
-            dataname="dataset/binance_1m_klines.csv",
+            dataname="dataset/binance_2019_1m_klines.csv",
             timeframe=bt.TimeFrame.Minutes,
+            fromdate=dateparser.parse(args.fromdate),
+            todate=dateparser.parse(args.todate),
             nullvalue=0.0
         )
 
@@ -82,7 +86,7 @@ def main():
     cerebro.addanalyzer(bt.analyzers.SQN, _name="sqn")
 
     # Include Strategy
-    cerebro.addstrategy(BasicRSI)
+    cerebro.addstrategy(Basic)
 
     # Starting backtrader bot
     initial_value = cerebro.broker.getvalue()
@@ -93,7 +97,7 @@ def main():
     final_value = cerebro.broker.getvalue()
     print('Final Portfolio Value: %.2f' % final_value)
     print('Profit %.3f%%' % ((final_value - initial_value) / initial_value * 100))
-    print_trade_analysis(result[0].analyzers.ta.get_analysis())
+    # print_trade_analysis(result[0].analyzers.ta.get_analysis())
     print_sqn(result[0].analyzers.sqn.get_analysis())
 
     if DEBUG:
@@ -102,7 +106,11 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        parser = argparse.ArgumentParser()
+        parser.add_argument('-f', '--fromdate', required=True, type=str, help='From date')
+        parser.add_argument('-t', '--todate', required=True, type=str, help='To date')
+        args = parser.parse_args()
+        main(args)
     except KeyboardInterrupt:
         print("finished.")
         time = dt.datetime.now().strftime("%d-%m-%y %H:%M")
