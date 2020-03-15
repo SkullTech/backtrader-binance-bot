@@ -87,7 +87,7 @@ class StrategyBase(bt.Strategy):
                           order.executed.value,
                           order.executed.comm), True)
 
-            # Sentinel to None: new orders allowed
+        # Sentinel to None: new orders allowed
         elif order.status in [order.Canceled, order.Margin, order.Rejected]:
             self.log('Order Canceled/Margin/Rejected: Status %s - %s' % (order.Status[order.status],
                                                                          self.last_operation), True)
@@ -103,6 +103,7 @@ class StrategyBase(bt.Strategy):
             color = 'red'
 
         self.log(colored('OPERATION PROFIT, GROSS %.2f, NET %.2f' % (trade.pnl, trade.pnlcomm), color), True)
+        self.last_operation = None
 
     def log(self, txt, send_telegram=False, color=None):
         if not DEBUG:

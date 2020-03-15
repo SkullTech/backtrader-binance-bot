@@ -11,7 +11,7 @@ from config import secrets, ENV, PRODUCTION, COIN_TARGET, COIN_REFER, DEBUG
 
 from dataset.dataset import BinanceDataset
 from sizer.percent import FullMoney
-from strategies.basic import Basic
+from strategies.basic import MACDStrategy
 from utils import print_trade_analysis, print_sqn, send_telegram_message
 
 
@@ -66,14 +66,14 @@ def main(args):
     else:  # Backtesting with CSV file
         data = BinanceDataset(
             name=COIN_TARGET,
-            dataname="dataset/binance_2019_1m_klines.csv",
+            dataname="dataset/binance_btc_cumulated_1m_klines.csv",
             timeframe=bt.TimeFrame.Minutes,
             fromdate=dateparser.parse(args.fromdate),
             todate=dateparser.parse(args.todate),
             nullvalue=0.0
         )
 
-        cerebro.resampledata(data, timeframe=bt.TimeFrame.Minutes, compression=30)
+        cerebro.resampledata(data, timeframe=bt.TimeFrame.Minutes, compression=args.compression)
 
         broker = cerebro.getbroker()
         broker.setcommission(commission=0.001, name=COIN_TARGET)  # Simulating exchange fee
@@ -86,7 +86,7 @@ def main(args):
     cerebro.addanalyzer(bt.analyzers.SQN, _name="sqn")
 
     # Include Strategy
-    cerebro.addstrategy(Basic)
+    cerebro.addstrategy(MACDStrategy)
 
     # Starting backtrader bot
     initial_value = cerebro.broker.getvalue()
@@ -109,6 +109,7 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser()
         parser.add_argument('-f', '--fromdate', required=True, type=str, help='From date')
         parser.add_argument('-t', '--todate', required=True, type=str, help='To date')
+        parser.add_argument('-c', '--compression', required=True, type=int, help='compression')
         args = parser.parse_args()
         main(args)
     except KeyboardInterrupt:

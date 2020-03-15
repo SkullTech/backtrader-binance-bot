@@ -1,42 +1,31 @@
-#!/usr/bin/env python3
-
 import backtrader as bt
 
 from config import ENV, PRODUCTION
 from strategies.base import StrategyBase
-from indicators.macd_hist import Greater
+from indicators.trend import Trend
 
 
-class Basic(StrategyBase):
+class MACDStrategy(StrategyBase):
     params = dict(
-        ma_period_fast=10,
-        ma_period_slow=120,
-        
-        adx_period=10,
-        adx_upper_bound=40,
-        adx_lower_bound=20,
+        movav=bt.indicators.EMA,
+        macd_period_fast=12,
+        macd_period_slow=26,
+        macd_period_signal=9,
+        macd_band=20,
+
+        entry_persistence=15,
+        close_persistence=0,
     )
 
     def __init__(self):
         StrategyBase.__init__(self)
-        self.log('Using RSI/EMA strategy')
+        self.log('Using MACD strategy')
 
-        self.ma_fast = bt.indicators.EMA(period=self.p.ma_period_fast)
-        self.ma_slow = bt.indicators.EMA(period=self.p.ma_period_slow)
-        self.lines.ma_uptrend = self.ma_fast >= self.ma_slow
-        self.lines.ma_downtrend = self.ma_fast < self.ma_slow
-
-        self.macd = bt.indicators.MACD(period_me1=self.p.macd_period_fast, period_me2=self.p.macd_period_slow, period_signal=self.p.macd_period_signal, plot=True)
-        self.macd_uptrend = self.macd.lines.macd >= self.macd.lines.signal
-        self.macd_downtrend = self.macd.lines.macd < self.macd.lines.signal
-        self.macd_positive = self.macd.lines.macd >= 0
-        self.macd_negative = self.macd.lines.macd < 0
-
-        self.adx = bt.indicators.ADX(period=self.p.adx_period)
-        self.adx_strong = self.adx > self.p.adx_upper_bound
-        self.adx_weak = self.adx <= self.p.adx_lower_bound
-        self.profit = 0
-
+        self.p.movav(period=self.p.macd_period_fast)
+        self.p.movav(period=self.p.macd_period_slow)
+        self.macd = bt.indicators.MACD(movav=self.p.movav, period_me1=self.p.macd_period_fast, period_me2=self.p.macd_period_slow, period_signal=self.p.macd_period_signal)
+        self.macd.lines.signal.plot = False
+        self.trend = Trend(self.macd, upperband=self.p.macd_band, lowerband=-self.p.macd_band)
 
     def update_indicators(self):
         self.profit = 0
@@ -60,15 +49,13 @@ class Basic(StrategyBase):
 
         if self.position:
             if self.last_operation == "BUY":
-                if self.macd_downtrend or self.ma_downtrend or self.adx_weak:
+                if self.trend <= -self.p.close_persistence:
                     self.close()
             if self.last_operation == "SELL":
-                if self.macd_uptrend or self.ma_uptrend or self.adx_weak:
+                if self.trend >= self.p.close_persistence:
                     self.close()
         
-        # if self.macd_uptrend:
-        if self.ma_uptrend and self.macd_uptrend and self.adx_strong:
+        if self.trend >= self.p.entry_persistence:
             self.long()
-        # if self.macd_downtrend:
-        if self.ma_downtrend and self.macd_downtrend and self.adx_strong:
+        if self.trend <= -self.p.entry_persistence:
             self.short()

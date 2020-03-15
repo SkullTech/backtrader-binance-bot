@@ -40,6 +40,7 @@ def print_trade_analysis(analyzer):
 def print_sqn(analyzer):
     sqn = round(analyzer.sqn, 2)
     print('SQN: {}'.format(sqn))
+    return sqn
 
 
 def send_telegram_message(message=""):
