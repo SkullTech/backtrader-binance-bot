@@ -17,3 +17,18 @@ class BinanceDataset(bt.feeds.GenericCSVData):
         ('tb_quote_av', 10),
         ('ignore', 11),
     )
+
+class NIFTY50Dataset(bt.feeds.GenericCSVData):
+    params = (
+        ('dtformat', ('%Y%m%d')),
+        ('tmformat', ('%H:%M')),
+        ('datetime', 1),
+        ('time', 2),
+        ('high', 3),
+        ('low', 4),
+        ('open', 5),
+        ('close', 6),
+        ('volume', 7),
+        ('openinterest', -1),
+        ('timeframe', bt.TimeFrame.Minutes)
+    )
