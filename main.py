@@ -85,8 +85,7 @@ def main(args):
         broker = cerebro.getbroker()
         broker.setcommission(commission=0.001, name=COIN_TARGET)  # Simulating exchange fee
         broker.setcash(100000.0)
-        cerebro.addsizer(PragmaticSizer, cashlimit=100000)
-        # cerebro.addsizer(bt.sizers.AllInSizer)
+        cerebro.addsizer(PragmaticSizer, cashlimit=100000.0)
 
     # Analyzers to evaluate trades and strategies
     # SQN = Average( profit / risk ) / StdDev( profit / risk ) x SquareRoot( number of trades )

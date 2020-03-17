@@ -12,10 +12,10 @@ from utils import print_trade_analysis, print_sqn, send_telegram_message
 
 
 def evaluate(args):
-    (compression, entry_persistence, period, multiplier) = args
+    (compression, entry_persistence, period, multiplier, cci_period) = args
     compression = int(compression)
     entry_persistence = int(entry_persistence)
-    period = int(entry_persistence)
+    period = int(period)
 
     cerebro = bt.Cerebro(quicknotify=True)
     data = BinanceDataset(
@@ -23,7 +23,7 @@ def evaluate(args):
         dataname="dataset/binance_btc_cumulated_1m_klines.csv",
         timeframe=bt.TimeFrame.Minutes,
         fromdate=dateparser.parse('1 Jan 2019'),
-        todate=dateparser.parse('1 Feb 2019'),
+        todate=dateparser.parse('31 Dec 2019'),
         nullvalue=0.0
     )
 
@@ -35,7 +35,7 @@ def evaluate(args):
     cerebro.addanalyzer(bt.analyzers.TradeAnalyzer, _name="ta")
     cerebro.addanalyzer(bt.analyzers.SQN, _name="sqn")
 
-    cerebro.addstrategy(SuperTrendCCIStrategy, entry_persistence=entry_persistence, supertrend_period=period, supertrend_multiplier=multiplier)
+    cerebro.addstrategy(SuperTrendCCIStrategy, entry_persistence=entry_persistence, supertrend_period=period, supertrend_multiplier=multiplier, cci_period=cci_period)
 
     initial_value = cerebro.broker.getvalue()
     print('Starting Portfolio Value: %.2f' % initial_value)
@@ -53,12 +53,13 @@ def evaluate(args):
 
 
 results = []
-for compression in [30, 45, 60]:
-    for entry_persistence in [3, 5, 10]:
-        for period in [5, 10, 20]: 
-            for multiplier in [1.5, 2, 3]:
-                fv, sqn = evaluate((compression, entry_persistence, period, multiplier))
-                results.append(f'compression: {compression}, entry_persistence {entry_persistence}, period {period}, multiplier {multiplier}, sqn {sqn}')
+for compression in [30]:
+    for entry_persistence in [10]:
+        for period in [14]:
+            for multiplier in [9]:
+                for cci_period in [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 25]:
+                    fv, sqn = evaluate((compression, entry_persistence, period, multiplier, cci_period))
+                    results.append(f'compression: {compression}, entry_persistence {entry_persistence}, period {period}, multiplier {multiplier}, sqn {sqn}, cci_period {cci_period}')
 
 for result in results:
     print(result)

@@ -8,13 +8,11 @@ from indicators.supertrend import SuperTrend
 
 class SuperTrendCCIStrategy(StrategyBase):
     params = dict(
-        supertrend_period=10,
-        supertrend_multiplier=5,
+        supertrend_period=14,
+        supertrend_multiplier=9,
 
         cci_period=20,
-        cci_factor=0.015,
-
-        entry_persistence=3,
+        entry_persistence=10,
     )
 
     def __init__(self):
@@ -22,7 +20,7 @@ class SuperTrendCCIStrategy(StrategyBase):
         self.log('Using SuperTrend strategy')
 
         self.supertrend = SuperTrend(period=self.p.supertrend_period, multiplier=self.p.supertrend_multiplier)
-        self.cci = bt.indicators.CCI(period=self.p.cci_period, factor=self.p.cci_factor)
+        self.cci = bt.indicators.CCI(period=self.p.cci_period)
         self.trend = Trend(self.data - self.supertrend, upperband=0, lowerband=0)
 
     def update_indicators(self):
@@ -55,5 +53,5 @@ class SuperTrendCCIStrategy(StrategyBase):
         
         if self.trend > 0 and self.trend <= self.p.entry_persistence and self.cci >= 100:
             self.long()
-        if self.trend < 0 and self.trend >= -self.p.entry_persistence and self.cci <= 100:
+        if self.trend < 0 and self.trend >= -self.p.entry_persistence and self.cci <= -100:
             self.short()

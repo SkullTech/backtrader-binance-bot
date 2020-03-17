@@ -1,0 +1,61 @@
+compression: 30, entry_persistence 3, period 5, multiplier 3, sqn 0.81
+compression: 60, entry_persistence 3, period 10, multiplier 1.5, sqn 0.52
+compression: 60, entry_persistence 3, period 20, multiplier 1.5, sqn 0.52
+compression: 60, entry_persistence 5, period 5, multiplier 1.5, sqn 0.6
+compression: 60, entry_persistence 5, period 10, multiplier 1.5, sqn 0.6
+compression: 60, entry_persistence 5, period 20, multiplier 1.5, sqn 0.6
+
+
+compression: 45, entry_persistence 3, period 5, multiplier 2, sqn 0.32
+compression: 45, entry_persistence 3, period 10, multiplier 2, sqn 0.32
+compression: 45, entry_persistence 3, period 20, multiplier 2, sqn 0.32
+compression: 45, entry_persistence 10, period 5, multiplier 2, sqn 0.31
+compression: 45, entry_persistence 10, period 10, multiplier 2, sqn 0.31
+compression: 45, entry_persistence 10, period 20, multiplier 2, sqn 0.31
+compression: 60, entry_persistence 10, period 5, multiplier 1.5, sqn 0.26
+compression: 60, entry_persistence 10, period 10, multiplier 1.5, sqn 0.26
+compression: 60, entry_persistence 10, period 20, multiplier 1.5, sqn 0.26
+
+
+
+compression: 30, entry_persistence 10, period 15, multiplier 12, sqn 1.37
+compression: 30, entry_persistence 10, period 10, multiplier 7, sqn 1.2
+compression: 30, entry_persistence 10, period 10, multiplier 9, sqn 1.43
+compression: 30, entry_persistence 10, period 10, multiplier 12, sqn 1.47
+compression: 30, entry_persistence 10, period 12, multiplier 7, sqn 0.91
+compression: 30, entry_persistence 10, period 12, multiplier 9, sqn 1.71
+compression: 30, entry_persistence 10, period 12, multiplier 12, sqn 1.37
+compression: 30, entry_persistence 10, period 15, multiplier 7, sqn 1.13
+compression: 30, entry_persistence 10, period 15, multiplier 9, sqn 1.96
+compression: 30, entry_persistence 10, period 15, multiplier 12, sqn 1.37
+
+compression: 30, entry_persistence 10, period 18, multiplier 10, sqn 1.69
+compression: 30, entry_persistence 10, period 14, multiplier 8, sqn 1.63
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.0
+compression: 30, entry_persistence 10, period 14, multiplier 10, sqn 1.75
+compression: 30, entry_persistence 10, period 16, multiplier 8, sqn 1.52
+compression: 30, entry_persistence 10, period 16, multiplier 9, sqn 1.85
+compression: 30, entry_persistence 10, period 16, multiplier 10, sqn 1.43
+compression: 30, entry_persistence 10, period 18, multiplier 8, sqn 1.47
+compression: 30, entry_persistence 10, period 18, multiplier 9, sqn 1.79
+compression: 30, entry_persistence 10, period 18, multiplier 10, sqn 1.69
+
+compression: 30, entry_persistence 10, period 17, multiplier 9, sqn 1.83
+compression: 30, entry_persistence 10, period 13, multiplier 9, sqn 1.95
+compression: 30, entry_persistence 10, period 16, multiplier 9, sqn 1.85
+compression: 30, entry_persistence 10, period 17, multiplier 9, sqn 1.83
+
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.1, cci_period 15
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.0, cci_period 20
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 1.97, cci_period 25
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 1.79, cci_period 40
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.04, cci_period 10
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.03, cci_period 12
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 1.89, cci_period 17
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.07, cci_period 7
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.05, cci_period 8
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.0, cci_period 9
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 1.7, cci_period 3
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.03, cci_period 5
+compression: 30, entry_persistence 10, period 14, multiplier 9, sqn 2.01, cci_period 6
+
